@@ -6,10 +6,10 @@
 
 ncpus=36
 
-for i in $(cat sample.list)
-do
+for sample in $(cat sample.list)
 
-#Short reads from 155 tea accessions are mapped to graph genome with vg giraffe	
+do
+#Short reads from 155 tea accessions were mapped to graph genome with vg giraffe	
 vg giraffe -p -t $ncpus -m graph.min -d graph.dist --gbwt-name graph.gbwt -x graph.gg -N sample -f $sample}_R1.fq.gz -f ${sample}_R2.fq.gz > sample.gam
 vg pack -t $ncups -x graph.xg -o graph.pack -g sample.gam -Q 5 
 
@@ -18,4 +18,5 @@ vg pack -t $ncups -x graph.xg -o graph.pack -g sample.gam -Q 5
 vg call graph.xg -k graph.pack -v var.vcf.gz --snarls graph.snarls -s sample -t $ncpus >sample.vcf
 
 bcftools sort sample.vcf | bgzip > sample.vcf.gz && tabix -p vcf sample.vcf.gz
+
 done
